@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>SVG Game</title>
+<script type="text/javascript" src="js/svg.min.js"></script>
+</head>
+<body>
+<div id="drawing">
+<button onclick="ship.dy(-5)">Up</button>
+<button onclick="ship.dy(5)">Down</button>
+</div>
+
+<script type="text/javascript" >
+var draw = SVG('drawing').size(1200,600)
+var rocks = []
+var num_rocks = 40
+var rock_size = 20
+var speed = 1000
+var alive = true
+
+for (var i=0;i<num_rocks;i++) {
+	// draw circle and fill with colour, then move
+	rocks.push(draw.circle(rock_size).fill('#aaaaaa'))
+	rocks[i].move(Math.random()*1200 + 200, Math.random()*600) 
+}
+
+// draw ship (w*h) and move to middle of LHS
+var ship = draw.rect(40,20).fill('#aa00aa')
+ship.move(0,300)
+
+function loop_forever() {
+	for (var i=0;i<num_rocks;i++) {
+		rocks[i].dx(-1 * speed/1000)
+		if (rocks[i].x() < 1) rocks[i].move(1200,Math.random()*600)
+		if (rocks[i].x() < 40 && rocks[i].y() > ship.y() -20 && rocks[i].y() < ship.y() + 20)
+			rocks[i].move(1200,Math.random()*600)
+		alert("Score:" + speed + "Reload the page to try again" )
+		alive = false
+	}
+}
+
+speed++
+if (alive) setTimeout(loop_forever,20)
+</script>
+</body>
+</html>
